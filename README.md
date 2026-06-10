@@ -4,11 +4,18 @@
 
 <img width="1578" height="935" alt="Screenshot 2026-06-10 at 9 34 42 PM" src="https://github.com/user-attachments/assets/a53b7234-5332-476e-b688-9ed2c7be4bb7" />
 
+```diff
+- i wish to be rich
++ I wish for my net worth to increase to eight million US dollars over four years through means that harm no one, including me.
+```
 
 A fan-made chatbot for the One Wish Willow from *Obsession* (2026). You tell
 the support line your wish; the guy who answers 1-323-747-7118 tells you,
 deadpan, exactly how it will go wrong. Every wish comes true *as worded* —
 the consultation exists so you find out before you snap the stick.
+
+
+
 
 Built with Next.js 16, the Vercel AI SDK v6, and DeepSeek V4 Flash
 (via OpenRouter or the DeepSeek platform directly). No auth; Redis is only for
