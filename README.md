@@ -2,6 +2,9 @@
 
 > Consult your wish before something bad happens.
 
+<img width="1578" height="935" alt="Screenshot 2026-06-10 at 9 34 42 PM" src="https://github.com/user-attachments/assets/a53b7234-5332-476e-b688-9ed2c7be4bb7" />
+
+
 A fan-made chatbot for the One Wish Willow from *Obsession* (2026). You tell
 the support line your wish; the guy who answers 1-323-747-7118 tells you,
 deadpan, exactly how it will go wrong. Every wish comes true *as worded* —
