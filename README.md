@@ -8,7 +8,8 @@ deadpan, exactly how it will go wrong. Every wish comes true *as worded* —
 the consultation exists so you find out before you snap the stick.
 
 Built with Next.js 16, the Vercel AI SDK v6, and DeepSeek V4 Flash
-(via OpenRouter or the DeepSeek platform directly). No auth, no database.
+(via OpenRouter or the DeepSeek platform directly). No auth; Redis is only for
+production rate-limit counters.
 
 ## The bits
 
@@ -36,10 +37,10 @@ cp .env.example .env.local   # add your key(s)
 npm run dev
 ```
 
-Provider resolution (`app/api/chat/route.ts`): if `DEEPSEEK_API_KEY` is set it
-talks to api.deepseek.com directly (`deepseek-v4-flash`); otherwise it uses
-`OPENROUTER_API_KEY` (`deepseek/deepseek-v4-flash`). Override with
-`DEEPSEEK_MODEL` / `OPENROUTER_MODEL`.
+Provider resolution lives in `env.mjs`: set `AI_PROVIDER=openrouter` or
+`AI_PROVIDER=deepseek`. Keep both `OPENROUTER_API_KEY` and `DEEPSEEK_API_KEY`
+configured in production, then switch providers by changing `AI_PROVIDER` and
+redeploying. Override models with `OPENROUTER_MODEL` / `DEEPSEEK_MODEL`.
 
 - **The snap** — every sent wish bursts a little spray of red letterpress
   doodles off the send button (`components/burst.tsx`), the same confetti

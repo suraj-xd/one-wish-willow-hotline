@@ -9,6 +9,7 @@
  */
 
 import { createHash } from "node:crypto";
+import { getUpstashConfig } from "@/env.mjs";
 
 const LIMITS = {
   messagesPerDay: intEnv("OWW_MESSAGES_PER_DAY", 80),
@@ -26,6 +27,13 @@ interface CounterStore {
   /** Increment key, setting TTL on first write. Returns the new count. */
   incr(key: string, ttlSeconds: number): Promise<number>;
 }
+
+type StoreKind = "memory" | "upstash";
+
+type StoreState = {
+  kind: StoreKind;
+  store: CounterStore;
+};
 
 class MemoryStore implements CounterStore {
   private map = new Map<string, { n: number; exp: number }>();
@@ -71,15 +79,16 @@ class UpstashStore implements CounterStore {
 }
 
 declare global {
-  var __owwStore: CounterStore | undefined;
+  var __owwStore: StoreState | undefined;
 }
 
-function store(): CounterStore {
+function store(): StoreState {
   if (!globalThis.__owwStore) {
-    const { UPSTASH_REDIS_REST_URL: url, UPSTASH_REDIS_REST_TOKEN: token } =
-      process.env;
-    globalThis.__owwStore =
-      url && token ? new UpstashStore(url, token) : new MemoryStore();
+    const upstash = getUpstashConfig();
+    globalThis.__owwStore = upstash
+      ? { kind: "upstash", store: new UpstashStore(upstash.url, upstash.token) }
+      : { kind: "memory", store: new MemoryStore() };
+    console.info(`[oww] rate limiter store: ${globalThis.__owwStore.kind}`);
   }
   return globalThis.__owwStore;
 }
@@ -136,13 +145,16 @@ export async function checkRateLimit(
   ip: string,
   isNewChat: boolean,
 ): Promise<RateVerdict> {
-  const s = store();
   const day = utcDay();
   const id = hashIp(ip);
   const dayTtl = secondsToUtcMidnight() + 60;
 
   try {
-    const burst = await s.incr(`oww:burst:${id}:${Math.floor(Date.now() / 60_000)}`, 65);
+    const s = store().store;
+    const burst = await s.incr(
+      `oww:burst:${id}:${Math.floor(Date.now() / 60_000)}`,
+      65,
+    );
     if (burst > LIMITS.burstPerMinute)
       return { ok: false, status: 429, retryAfter: 60, message: DENIALS.burst };
 
@@ -181,7 +193,8 @@ export async function checkRateLimit(
       wishesLeft: Math.max(0, LIMITS.chatsPerDay - chats),
       messagesLeft: Math.max(0, LIMITS.messagesPerDay - msgs),
     };
-  } catch {
+  } catch (error) {
+    console.error("[oww] rate limiter error:", error);
     // A broken limiter should degrade to letting people in, not lock the door.
     return { ok: true, wishesLeft: 1, messagesLeft: 1 };
   }

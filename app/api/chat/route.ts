@@ -2,37 +2,33 @@ import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { createDeepSeek } from "@ai-sdk/deepseek";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { z } from "zod";
+import { getAIProviderConfig } from "@/env.mjs";
 import { SYSTEM_PROMPT, RESURRECTED_NOTE } from "@/lib/prompt";
 import { checkRateLimit, clientIp, isUnlimited } from "@/lib/ratelimit";
 
 export const maxDuration = 30;
 
-/** Tolerate quoted/prefix-mangled keys from shell paste accidents. */
-function cleanApiKey(raw: string | undefined): string | undefined {
-  if (!raw) return undefined;
-  const trimmed = raw.trim().replace(/^["']+|["']+$/g, "");
-  const start = trimmed.indexOf("sk-");
-  return start > 0 ? trimmed.slice(start) : trimmed;
-}
-
 /**
- * A DeepSeek key talks to api.deepseek.com directly (no middleman);
- * otherwise the line is routed through OpenRouter. V4 Flash either way.
+ * AI_PROVIDER selects the backend:
+ * - deepseek: api.deepseek.com directly
+ * - openrouter: OpenRouter with reasoning disabled for fast V4 Flash replies
  */
 function resolveModel() {
-  const deepseekKey = cleanApiKey(process.env.DEEPSEEK_API_KEY);
-  if (deepseekKey) {
-    const deepseek = createDeepSeek({ apiKey: deepseekKey });
+  const config = getAIProviderConfig();
+
+  if (config.provider === "deepseek") {
+    const deepseek = createDeepSeek({ apiKey: config.apiKey });
     return {
-      model: deepseek(process.env.DEEPSEEK_MODEL ?? "deepseek-v4-flash"),
+      model: deepseek(config.model),
       providerOptions: undefined,
     };
   }
+
   const openrouter = createOpenRouter({
-    apiKey: cleanApiKey(process.env.OPENROUTER_API_KEY),
+    apiKey: config.apiKey,
   });
   return {
-    model: openrouter(process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-v4-flash"),
+    model: openrouter(config.model),
     providerOptions: {
       openrouter: {
         reasoning: { effort: "none" },

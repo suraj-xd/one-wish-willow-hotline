@@ -80,8 +80,8 @@ export function CrashTakeover({ onRestart }: { onRestart: () => void }) {
 
   if (stage.kind === "dead") {
     return (
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-deep/85 px-6 backdrop-blur-md">
-        <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-3xl border-[3px] border-brand bg-cream-bright px-8 py-9 text-center shadow-[0_18px_50px_rgba(60,0,0,0.45)]">
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center px-6 backdrop-blur-md">
+        <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-xl  bg-cream-bright px-8 py-9 text-center">
           {/* the interface died; the pyramid keeps turning */}
           <Image
             src="/pyramid.gif"
