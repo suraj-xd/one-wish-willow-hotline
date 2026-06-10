@@ -62,7 +62,7 @@ function SaferWording({ text, lineKey }: { text: string; lineKey: string }) {
           alt=""
           width={34}
           height={24}
-          className="h-6 w-auto select-none"
+          className="select-none"
         />
         <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-brand">
           safer wording
