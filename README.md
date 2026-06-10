@@ -16,10 +16,6 @@ the consultation exists so you find out before you snap the stick.
 
 ## Try asking
 
-- "i want to fly"
-- "i want to be rich"
-- "i wish my ex would come back"
-- "i never want to be tired again"
 - "i want a smoking hot girlfrien"
 - "i want my crush to be obsessed with me"
 - "i want my problems to disappear"

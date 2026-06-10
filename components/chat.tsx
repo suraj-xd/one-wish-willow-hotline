@@ -27,11 +27,11 @@ const AFTERLIFE_KEY = "oww_afterlife";
 const MAX_INPUT = 600;
 
 const EXAMPLE_WISHES = [
-  "i want to fly",
-  "i want to be rich",
-  "i wish my ex would come back",
-  "i never want to be tired again",
-  "i want everyone to like me",
+  "i want a smoking hot girlfriend",
+  "i want my crush to be obsessed with me",
+  "i want my problems to disappear",
+	"i want to never feel pain again",
+	"i want to fly",
 ];
 
 function loadSession(): UIMessage[] {
