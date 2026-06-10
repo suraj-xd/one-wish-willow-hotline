@@ -343,7 +343,9 @@ export function WishChat() {
             placeholder={
               exhausted
                 ? "the line for this wish has closed…"
-                : "type your wish carefully…"
+                : empty
+                  ? "type your wish carefully…"
+                  : "ask a follow up…"
             }
             onChange={(e) => {
               setInput(e.target.value);
