@@ -192,40 +192,37 @@ export function WishChat() {
       {crash === "active" && <CrashTakeover onRestart={restartAfterCrash} />}
 
       {/* header */}
-      <header className="shrink-0 border-b-2 border-brand/15">
-        <div className="mx-auto flex w-full max-w-2xl items-center justify-between gap-3 px-4 py-2.5">
-          <div className="flex items-center gap-2.5">
-            <Image
-              src="/logo-arch.png"
-              alt="One Wish Willow"
-              width={108}
-              height={25}
-              priority
-            />
-            {/*<span className="mt-0.5 hidden font-display text-[10px] font-bold uppercase tracking-[0.22em] text-ink-soft sm:block">
-              wish consultation line
-            </span>*/}
-          </div>
-          <div className="flex items-center gap-2">
-            {wishesLeft !== null && (
-              <span
-                className="rounded-full border border-brand/30 bg-cream-bright px-2.5 py-1 font-display text-[11px] font-bold text-brand-deep"
-                title="New consultations left today"
-              >
-                wishes left: {wishesLeft === "inf" ? "∞" : wishesLeft}
-              </span>
-            )}
-            {!empty && (
+      {!empty && (
+        <header className="shrink-0 border-b-2 border-brand/15">
+          <div className="mx-auto flex w-full max-w-2xl items-center justify-between gap-3 px-4 py-2.5">
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/logo-arch.png"
+                alt="One Wish Willow"
+                width={108}
+                height={25}
+                priority
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              {wishesLeft !== null && (
+                <span
+                  className="rounded-full border border-brand/30 bg-cream-bright px-2.5 py-1 font-display text-[11px] font-bold text-brand-deep"
+                  title="New consultations left today"
+                >
+                  wishes left: {wishesLeft === "inf" ? "∞" : wishesLeft}
+                </span>
+              )}
               <button
                 onClick={newWish}
                 className="rounded-full border-2 border-brand px-3 py-1 font-display text-xs font-extrabold uppercase tracking-wide text-brand transition-colors hover:bg-brand hover:text-cream-bright"
               >
                 new wish
               </button>
-            )}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* conversation */}
       <div ref={scrollRef} className="relative flex-1 overflow-y-auto">

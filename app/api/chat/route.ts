@@ -23,12 +23,22 @@ function resolveModel() {
   const deepseekKey = cleanApiKey(process.env.DEEPSEEK_API_KEY);
   if (deepseekKey) {
     const deepseek = createDeepSeek({ apiKey: deepseekKey });
-    return deepseek(process.env.DEEPSEEK_MODEL ?? "deepseek-v4-flash");
+    return {
+      model: deepseek(process.env.DEEPSEEK_MODEL ?? "deepseek-v4-flash"),
+      providerOptions: undefined,
+    };
   }
   const openrouter = createOpenRouter({
     apiKey: cleanApiKey(process.env.OPENROUTER_API_KEY),
   });
-  return openrouter(process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-v4-flash");
+  return {
+    model: openrouter(process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-v4-flash"),
+    providerOptions: {
+      openrouter: {
+        reasoning: { effort: "none" },
+      },
+    },
+  };
 }
 
 const MAX_PART_CHARS = 2_000;
@@ -153,9 +163,10 @@ export async function POST(req: Request) {
 
     const resurrected = req.headers.get("x-oww-resurrected") === "1";
     const system = resurrected ? SYSTEM_PROMPT + RESURRECTED_NOTE : SYSTEM_PROMPT;
+    const modelConfig = resolveModel();
 
     const result = streamText({
-      model: resolveModel(),
+      ...modelConfig,
       system,
       messages: await convertToModelMessages(sanitized),
       temperature: 0.85,

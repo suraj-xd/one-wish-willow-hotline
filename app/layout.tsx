@@ -25,7 +25,22 @@ export const metadata: Metadata = {
     title: "One Wish Willow™ — Wish Consultation Line",
     description:
       "Consult your wish before something bad happens. Every wish comes true exactly as worded.",
-    images: ["/og.png"],
+    images: [
+      {
+        url: "/og.svg",
+        width: 712,
+        height: 419,
+        alt: "One Wish Willow wish consultation line",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/og.png",
+        width: 712,
+        height: 419,
+        alt: "One Wish Willow wish consultation line",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
