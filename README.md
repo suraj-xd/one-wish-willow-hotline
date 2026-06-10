@@ -14,8 +14,13 @@ the support line your wish; the guy who answers 1-323-747-7118 tells you,
 deadpan, exactly how it will go wrong. Every wish comes true *as worded* —
 the consultation exists so you find out before you snap the stick.
 
+## Try asking
 
-
+- "i want to fly"
+- "i want to be rich"
+- "i wish my ex would come back"
+- "i never want to be tired again"
+- Warning: **Don't ask if nicky's dad really has cancer?**
 
 Built with Next.js 16, the Vercel AI SDK v6, and DeepSeek V4 Flash
 (via OpenRouter or the DeepSeek platform directly). No auth; Redis is only for
@@ -34,8 +39,7 @@ production rate-limit counters.
   conversation"*, then a synthetic crash with a branded error card
   (`error code: WLW-1323`). Restarting reloads clean — but the line remembers:
   the next reply opens cold. Detection in `lib/forbidden.ts`, theater in
-  `components/crash.tsx`. Last warning: **Don't ask if nicky's dad has
-  cancer?**
+  `components/crash.tsx`.
 - **Fine print** — the liability line ending each consultation renders as
   actual fine print, with the ⓘ and everything. TABI Cat Curiosities is not
   responsible for wish misinterpretations.
