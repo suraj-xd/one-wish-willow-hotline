@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const DEFAULT_SITE_URL = "https://one-wish-willow-hotline.vercel.app";
+const DEFAULT_SITE_URL = "https://www.onewishwillow.help";
 const AI_PROVIDERS = ["deepseek", "openrouter"];
 
 const providerSchema = z.enum(AI_PROVIDERS);
