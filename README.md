@@ -20,6 +20,7 @@ the consultation exists so you find out before you snap the stick.
 - "i want to be rich"
 - "i wish my ex would come back"
 - "i never want to be tired again"
+- "i want an hot girlfrined"
 - Warning: **Don't ask if nicky's dad really has cancer?**
 
 Built with Next.js 16, the Vercel AI SDK v6, and DeepSeek V4 Flash
