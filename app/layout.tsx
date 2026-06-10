@@ -69,18 +69,18 @@ export const metadata: Metadata = {
     description: SITE_OG_DESCRIPTION,
     images: [
       {
+        url: "/og.png",
+        width: 2400,
+        height: 1413,
+        alt: SITE_IMAGE_ALT,
+        type: "image/png",
+      },
+      {
         url: "/og.svg",
         width: 712,
         height: 419,
         alt: SITE_IMAGE_ALT,
         type: "image/svg+xml",
-      },
-      {
-        url: "/og.png",
-        width: 712,
-        height: 419,
-        alt: SITE_IMAGE_ALT,
-        type: "image/png",
       },
     ],
   },
