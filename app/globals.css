@@ -1,0 +1,372 @@
+@import "tailwindcss";
+
+@theme {
+  /* One Wish Willow brand — sampled from onewishwillow.com */
+  --color-cream: #f9ddc2;
+  --color-cream-bright: #fff4e3;
+  --color-cream-deep: #f0cfae;
+  --color-ink: #2c2118;
+  --color-ink-soft: #6b5a4a;
+  --color-brand: #ed1c24;
+  --color-brand-deep: #b01212;
+  --color-brand-dark: #8b0000;
+}
+
+@theme inline {
+  --font-display: var(--font-baloo);
+  --font-body: var(--font-nunito);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body), ui-rounded, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: var(--color-cream-bright);
+}
+
+/* vintage paper: low-frequency mottling + warm edge vignette… */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.75;
+  mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(
+      ellipse 120% 100% at 50% 40%,
+      transparent 50%,
+      rgba(107, 24, 3, 0.16) 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.013' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.32 0 0 0 0 0.2 0 0 0 0.24 0'/%3E%3C/filter%3E%3Crect width='420' height='420' filter='url(%23p)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.05 0.18' numOctaves='2' seed='12'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.26 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+
+/* …plus fine print grain over everything */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* thin retro scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-brand) 45%, transparent) transparent;
+}
+
+/* ---------- doodles ---------- */
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.25) rotate(12deg);
+    opacity: 1;
+  }
+}
+
+.doodle {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(1.5deg);
+  }
+}
+
+.pyramid-bob {
+  animation: bob 4s ease-in-out infinite;
+}
+
+/* staggered page-load reveal */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* thinking dots */
+@keyframes dot-blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.tdot {
+  animation: dot-blink 1.2s infinite;
+}
+.tdot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.tdot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ---------- the leak-through (glitch) ---------- */
+
+@keyframes glitch-jitter {
+  0% {
+    transform: translate(0, 0) skewX(0deg);
+  }
+  20% {
+    transform: translate(-2px, 1px) skewX(-2deg);
+  }
+  40% {
+    transform: translate(2px, -1px) skewX(1.5deg);
+  }
+  60% {
+    transform: translate(-1px, 2px) skewX(0.5deg);
+  }
+  80% {
+    transform: translate(1px, -2px) skewX(-1deg);
+  }
+  100% {
+    transform: translate(0, 0) skewX(0deg);
+  }
+}
+
+.glitching {
+  animation: glitch-jitter 0.09s steps(2) infinite;
+  color: var(--color-brand-deep);
+  text-shadow:
+    1.5px 0 0 rgba(237, 28, 36, 0.8),
+    -1.5px 0 0 rgba(26, 31, 113, 0.55);
+}
+
+.glitch-leak {
+  color: var(--color-brand-deep);
+  text-shadow: 0.5px 0 0 rgba(237, 28, 36, 0.5);
+}
+
+/* scanline wipe shown the instant the wrong message is retracted */
+@keyframes scan-wipe {
+  from {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+}
+
+.scan-out {
+  animation: scan-wipe 0.28s steps(7) forwards;
+}
+
+/* blinking caret while the wrong thing types itself */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret::after {
+  content: "▌";
+  margin-left: 1px;
+  color: var(--color-brand);
+  animation: caret-blink 0.7s infinite;
+}
+
+/* ---------- the forbidden question ---------- */
+
+@keyframes overlay-to-red {
+  from {
+    background: var(--color-cream);
+  }
+  to {
+    background: var(--color-brand);
+  }
+}
+
+.crash-overlay {
+  animation: overlay-to-red 0.5s ease-in forwards;
+}
+
+@keyframes no-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.no-pop {
+  animation: no-pop 0.12s steps(2) both;
+}
+
+@keyframes shake-soft {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2px, 1px);
+  }
+  75% {
+    transform: translate(2px, -1px);
+  }
+}
+
+@keyframes shake-hard {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(-6px, 3px) rotate(-0.6deg);
+  }
+  40% {
+    transform: translate(5px, -4px) rotate(0.5deg);
+  }
+  60% {
+    transform: translate(-4px, -3px) rotate(-0.4deg);
+  }
+  80% {
+    transform: translate(6px, 4px) rotate(0.6deg);
+  }
+}
+
+.shaking-soft {
+  animation: shake-soft 0.18s linear infinite;
+}
+
+.shaking-hard {
+  animation: shake-hard 0.14s linear infinite;
+}
+
+@keyframes white-flash {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.flash {
+  animation: white-flash 0.5s ease-out forwards;
+}
+
+/* the red marker — someone highlighted the worst part */
+.oww-mark {
+  font-style: italic;
+  color: var(--color-cream-bright);
+  background-color: transparent;
+  background-image: linear-gradient(var(--color-brand), var(--color-brand));
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  padding: 0.05em 0.28em;
+  margin: 0 0.06em;
+  border-radius: 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  animation: mark-sweep 0.6s cubic-bezier(0.3, 1, 0.45, 1) both;
+}
+
+@keyframes mark-sweep {
+  0% {
+    background-size: 0% 100%;
+    color: var(--color-ink);
+  }
+  40% {
+    color: var(--color-ink);
+  }
+  55% {
+    color: var(--color-cream-bright);
+  }
+  100% {
+    background-size: 100% 100%;
+  }
+}
+
+/* the snap — doodle confetti off the send button */
+@keyframes crack-fly {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0.3);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1);
+    opacity: 0;
+  }
+}
+
+.crack-fly {
+  animation: crack-fly 0.65s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+}
+
+/* motion mercy */
+@media (prefers-reduced-motion: reduce) {
+  .glitching,
+  .shaking-soft,
+  .shaking-hard,
+  .doodle,
+  .pyramid-bob {
+    animation: none;
+  }
+  .no-pop,
+  .rise {
+    animation-duration: 0.01s;
+  }
+  .crack-burst {
+    display: none;
+  }
+  .oww-mark {
+    animation: none;
+  }
+}
