@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GITHUB_REPO_URL } from "@/lib/github";
 
 /** The red strip from the storefront, scaled down to a chat footer. */
 export function HelpBanner() {
@@ -6,8 +7,16 @@ export function HelpBanner() {
     <footer className="shrink-0">
       <p className="px-4 pb-1.5 text-center text-[10px] leading-tight text-ink-soft/80">
         The One Wish Willow™ is 100% magical and 0% real. For entertainment
-        only. No actual wishes consulted, granted, or survived. A fan project —
-        not affiliated with Focus Features.
+        only. No actual wishes consulted, granted, or survived.{" "}
+        <a
+          href={GITHUB_REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-ink-soft/80 underline decoration-ink-soft/35 underline-offset-2 transition-colors hover:text-ink-soft"
+        >
+          A fan project
+        </a>{" "}
+        — not affiliated with Focus Features.
       </p>
       <div className="flex items-center justify-center gap-3 bg-brand px-4 py-2 sm:gap-5">
         <span className="font-display text-[13px] font-extrabold uppercase leading-[1.05] tracking-wide text-cream-bright sm:text-sm">

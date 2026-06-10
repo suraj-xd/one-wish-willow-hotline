@@ -64,14 +64,13 @@ redeploying. Override models with `OPENROUTER_MODEL` / `DEEPSEEK_MODEL`.
 ## Guardrails (no auth)
 
 `OWW_MODE=local` disables every limit (the default while developing —
-the header chip reads `chats left: ∞`); `OWW_MODE=prod` enforces them
+the header chip reads `messages left: ∞`); `OWW_MODE=prod` enforces them
 (the default in production builds).
 
 Per hashed IP, fixed UTC-day windows (`lib/ratelimit.ts`):
 
 | limit | default | env |
 |---|---|---|
-| new consultations / day | 10 | `OWW_CHATS_PER_DAY` |
 | messages / day | 50 | `OWW_MESSAGES_PER_DAY` |
 | messages / minute (burst) | 8 | `OWW_BURST_PER_MINUTE` |
 | global messages / day (wallet guard) | 4000 | `OWW_GLOBAL_MESSAGES_PER_DAY` |

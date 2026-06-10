@@ -1,7 +1,7 @@
 /**
  * No-auth rate limiting, keyed by hashed IP, with fixed UTC-day windows.
  *
- * Two drivers:
+ * One daily message limit, with two storage drivers:
  *  - Upstash Redis (REST) when UPSTASH_REDIS_REST_URL/TOKEN are set — correct
  *    across serverless instances; use this in production.
  *  - In-memory Map otherwise — exact in dev / single-process, best-effort on
@@ -13,7 +13,6 @@ import { getUpstashConfig } from "@/env.mjs";
 
 const LIMITS = {
   messagesPerDay: intEnv("OWW_MESSAGES_PER_DAY", 50),
-  chatsPerDay: intEnv("OWW_CHATS_PER_DAY", 10),
   burstPerMinute: intEnv("OWW_BURST_PER_MINUTE", 8),
   globalPerDay: intEnv("OWW_GLOBAL_MESSAGES_PER_DAY", 4000),
 };
@@ -115,7 +114,7 @@ function secondsToUtcMidnight(): number {
 }
 
 export type RateVerdict =
-  | { ok: true; chatsLeft: number; messagesLeft: number }
+  | { ok: true; messagesLeft: number }
   | { ok: false; status: 429; retryAfter: number; message: string };
 
 /**
@@ -135,16 +134,11 @@ const DENIALS = {
     "whoa. don't come to the chat with this energy, man. give it a minute and try again.",
   messages:
     "that's every question the line can take from you today. the willow needs rest. come back tomorrow.",
-  chats:
-    "you've opened enough consultations for one day. think carefully about the wishes already on the line. come back tomorrow.",
   global:
     "the line is overwhelmed right now. everybody wants a wish. come back tomorrow.",
 };
 
-export async function checkRateLimit(
-  ip: string,
-  isNewChat: boolean,
-): Promise<RateVerdict> {
+export async function checkRateLimit(ip: string): Promise<RateVerdict> {
   const day = utcDay();
   const id = hashIp(ip);
   const dayTtl = secondsToUtcMidnight() + 60;
@@ -176,27 +170,14 @@ export async function checkRateLimit(
         message: DENIALS.messages,
       };
 
-    let chats = 0;
-    if (isNewChat) {
-      chats = await s.incr(`oww:chat:${day}:${id}`, dayTtl);
-      if (chats > LIMITS.chatsPerDay)
-        return {
-          ok: false,
-          status: 429,
-          retryAfter: secondsToUtcMidnight(),
-          message: DENIALS.chats,
-        };
-    }
-
     return {
       ok: true,
-      chatsLeft: Math.max(0, LIMITS.chatsPerDay - chats),
       messagesLeft: Math.max(0, LIMITS.messagesPerDay - msgs),
     };
   } catch (error) {
     console.error("[oww] rate limiter error:", error);
     // A broken limiter should degrade to letting people in, not lock the door.
-    return { ok: true, chatsLeft: 1, messagesLeft: 1 };
+    return { ok: true, messagesLeft: 1 };
   }
 }
 
