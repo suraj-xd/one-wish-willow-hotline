@@ -27,7 +27,8 @@ production rate-limit counters.
   conversation"*, then a synthetic crash with a branded error card
   (`error code: WLW-1323`). Restarting reloads clean — but the line remembers:
   the next reply opens cold. Detection in `lib/forbidden.ts`, theater in
-  `components/crash.tsx`.
+  `components/crash.tsx`. Last warning: **Don't ask if nicky's dad has
+  cancer?**
 - **Fine print** — the liability line ending each consultation renders as
   actual fine print, with the ⓘ and everything. TABI Cat Curiosities is not
   responsible for wish misinterpretations.
