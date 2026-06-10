@@ -27,6 +27,7 @@ const AFTERLIFE_KEY = "oww_afterlife";
 const MAX_INPUT = 600;
 
 const EXAMPLE_WISHES = [
+  "i want to fly",
   "i want to be rich",
   "i wish my ex would come back",
   "i never want to be tired again",
@@ -231,15 +232,6 @@ export function WishChat() {
         {empty ? (
           <div className="relative mx-auto flex h-full max-w-2xl flex-col items-center justify-center px-6 text-center">
             <Doodles />
-            <Image
-              src="/pyramid.gif"
-              alt="Rotating One Wish Willow pyramid"
-              width={120}
-              height={120}
-              unoptimized
-              priority
-              className="pyramid-bob rise mb-5"
-            />
             <h1
               className="rise font-display text-4xl font-extrabold uppercase leading-[0.95] tracking-tight text-brand sm:text-5xl"
               style={{ animationDelay: "0.08s" }}
@@ -252,8 +244,7 @@ export function WishChat() {
               className="rise mt-4 max-w-md text-[15px] font-semibold text-ink-soft"
               style={{ animationDelay: "0.16s" }}
             >
-              Every wish comes true <em>exactly as worded</em>. Consult yours
-              before something bad happens — free, 24/7, mostly confidential.
+              Consult your wishes before something bad happens.
             </p>
             <div
               className="rise mt-7 flex flex-wrap items-center justify-center gap-2"
@@ -342,7 +333,7 @@ export function WishChat() {
         )}
         <form
           onSubmit={onSubmit}
-          className="mx-auto flex w-full max-w-2xl items-end gap-2 rounded-3xl border-2 border-brand/25 bg-cream-bright px-4 py-2.5 shadow-[0_8px_24px_rgba(107,24,3,0.12)] transition-colors focus-within:border-brand/70"
+          className="mx-auto flex w-full max-w-2xl items-end gap-2 rounded-3xl border-2 border-brand/25 bg-cream-bright px-4 py-2 shadow-[0_8px_24px_rgba(107,24,3,0.12)] transition-colors focus-within:border-brand/70"
         >
           <textarea
             ref={inputRef}
@@ -392,9 +383,9 @@ export function WishChat() {
                 type="submit"
                 disabled={!input.trim()}
                 aria-label="Send your wish"
-                className="grid size-10 place-items-center rounded-full bg-brand text-cream-bright transition-all enabled:hover:scale-105 enabled:hover:bg-brand-deep disabled:opacity-35"
+                className="grid size-8 place-items-center rounded-full bg-brand text-cream-bright transition-all enabled:hover:scale-105 enabled:hover:bg-brand-deep disabled:opacity-35"
               >
-                <svg viewBox="0 0 24 24" className="size-4 fill-current" aria-hidden>
+                <svg viewBox="0 0 24 24" className="size-3 fill-current" aria-hidden>
                   <path d="M12 2 23 22H1L12 2Z" />
                 </svg>
               </button>

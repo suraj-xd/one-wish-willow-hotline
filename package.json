@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "audit:prod": "npm audit --omit=dev --audit-level=high"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^2.0.35",
@@ -25,5 +27,10 @@
     "@types/react-dom": "^19.2.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.10"
+    }
   }
 }
