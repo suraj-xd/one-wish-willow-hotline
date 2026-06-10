@@ -16,7 +16,7 @@ the consultation exists so you find out before you snap the stick.
 
 ## Try asking
 
-- "i want a smoking hot girlfrien"
+- "i want a smoking hot girlfriend"
 - "i want my crush to be obsessed with me"
 - "i want my problems to disappear"
 - "i want to never feel pain again"
