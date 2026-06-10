@@ -49,7 +49,7 @@ export function WishChat() {
   const [leak, setLeak] = useState<{ line: string } | null>(null);
   const [crash, setCrash] = useState<null | "arming" | "active">(null);
   const [burst, setBurst] = useState<number | null>(null);
-  const [messagesLeft, setMessagesLeft] = useState<string | null>(null);
+  const [chatsLeft, setChatsLeft] = useState<string | null>(null);
   const resurrected = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -62,8 +62,10 @@ export function WishChat() {
           resurrected.current ? { "x-oww-resurrected": "1" } : {},
         fetch: (async (input: RequestInfo | URL, init?: RequestInit) => {
           const res = await fetch(input, init);
-          const messages = res.headers.get("x-oww-messages-left");
-          if (messages !== null) setMessagesLeft(messages);
+          const chats =
+            res.headers.get("x-oww-chats-left") ??
+            res.headers.get("x-oww-wishes-left");
+          if (chats !== null) setChatsLeft(chats);
           if (!res.ok) {
             let message = "the line went dead for a moment. try again.";
             try {
@@ -192,41 +194,37 @@ export function WishChat() {
       {crash === "active" && <CrashTakeover onRestart={restartAfterCrash} />}
 
       {/* header */}
-      <header className="shrink-0 border-b-2 border-brand/15">
-        <div className="mx-auto flex w-full max-w-2xl items-center justify-between gap-3 px-4 py-2.5">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <Image
-              src="/logo-arch.png"
-              alt="One Wish Willow"
-              width={108}
-              height={25}
-              priority
-              className="h-auto w-[96px] shrink-0 sm:w-[108px]"
-            />
-          </div>
-          <div className="flex min-w-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2">
-            {!empty && (
-              <>
-                {messagesLeft !== null && (
-                  <span
-                    className="rounded-full border border-brand/30 bg-cream-bright px-2 py-1 font-display text-[11px] font-bold text-brand-deep sm:px-2.5"
-                    title="Messages left today"
-                  >
-                    messages left:{" "}
-                    {messagesLeft === "inf" ? "∞" : messagesLeft}
-                  </span>
-                )}
-                <button
-                  onClick={newWish}
-                  className="rounded-full border-2 border-brand px-2.5 py-1 font-display text-xs font-extrabold uppercase tracking-wide text-brand transition-colors hover:bg-brand hover:text-cream-bright sm:px-3"
+      {!empty && (
+        <header className="shrink-0 border-b-2 border-brand/15">
+          <div className="mx-auto flex w-full max-w-2xl items-center justify-between gap-3 px-4 py-2.5">
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/logo-arch.png"
+                alt="One Wish Willow"
+                width={108}
+                height={25}
+                priority
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              {chatsLeft !== null && (
+                <span
+                  className="rounded-full border border-brand/30 bg-cream-bright px-2.5 py-1 font-display text-[11px] font-bold text-brand-deep"
+                  title="New consultations left today"
                 >
-                  new wish
-                </button>
-              </>
-            )}
+                  chats left: {chatsLeft === "inf" ? "∞" : chatsLeft}
+                </span>
+              )}
+              <button
+                onClick={newWish}
+                className="rounded-full border-2 border-brand px-3 py-1 font-display text-xs font-extrabold uppercase tracking-wide text-brand transition-colors hover:bg-brand hover:text-cream-bright"
+              >
+                new wish
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* conversation */}
       <div ref={scrollRef} className="relative flex-1 overflow-y-auto">

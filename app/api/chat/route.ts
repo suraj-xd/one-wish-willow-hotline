@@ -148,10 +148,11 @@ export async function POST(req: Request) {
       return inCharacterError(400, "say something and the line will answer.");
     }
 
+    const isNewChat = sanitized.filter((m) => m.role === "user").length === 1;
     const unlimited = isUnlimited();
     const verdict = unlimited
-      ? ({ ok: true, messagesLeft: -1 } as const)
-      : await checkRateLimit(clientIp(req));
+      ? ({ ok: true, chatsLeft: -1, messagesLeft: -1 } as const)
+      : await checkRateLimit(clientIp(req), isNewChat);
     if (!verdict.ok) {
       return inCharacterError(verdict.status, verdict.message, verdict.retryAfter);
     }
@@ -173,6 +174,10 @@ export async function POST(req: Request) {
     const headers: Record<string, string> = {
       "x-oww-messages-left": unlimited ? "inf" : String(verdict.messagesLeft),
     };
+    if (isNewChat)
+      headers["x-oww-chats-left"] = unlimited
+        ? "inf"
+        : String(verdict.chatsLeft);
 
     return result.toUIMessageStreamResponse({
       headers,
