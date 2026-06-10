@@ -12,8 +12,8 @@ import { createHash } from "node:crypto";
 import { getUpstashConfig } from "@/env.mjs";
 
 const LIMITS = {
-  messagesPerDay: intEnv("OWW_MESSAGES_PER_DAY", 80),
-  chatsPerDay: intEnv("OWW_CHATS_PER_DAY", 4),
+  messagesPerDay: intEnv("OWW_MESSAGES_PER_DAY", 50),
+  chatsPerDay: intEnv("OWW_CHATS_PER_DAY", 10),
   burstPerMinute: intEnv("OWW_BURST_PER_MINUTE", 8),
   globalPerDay: intEnv("OWW_GLOBAL_MESSAGES_PER_DAY", 4000),
 };
@@ -115,7 +115,7 @@ function secondsToUtcMidnight(): number {
 }
 
 export type RateVerdict =
-  | { ok: true; wishesLeft: number; messagesLeft: number }
+  | { ok: true; chatsLeft: number; messagesLeft: number }
   | { ok: false; status: 429; retryAfter: number; message: string };
 
 /**
@@ -136,7 +136,7 @@ const DENIALS = {
   messages:
     "that's every question the line can take from you today. the willow needs rest. come back tomorrow.",
   chats:
-    "you've opened enough consultations for one day. think carefully about the wishes you already have. come back tomorrow.",
+    "you've opened enough consultations for one day. think carefully about the wishes already on the line. come back tomorrow.",
   global:
     "the line is overwhelmed right now. everybody wants a wish. come back tomorrow.",
 };
@@ -190,13 +190,13 @@ export async function checkRateLimit(
 
     return {
       ok: true,
-      wishesLeft: Math.max(0, LIMITS.chatsPerDay - chats),
+      chatsLeft: Math.max(0, LIMITS.chatsPerDay - chats),
       messagesLeft: Math.max(0, LIMITS.messagesPerDay - msgs),
     };
   } catch (error) {
     console.error("[oww] rate limiter error:", error);
     // A broken limiter should degrade to letting people in, not lock the door.
-    return { ok: true, wishesLeft: 1, messagesLeft: 1 };
+    return { ok: true, chatsLeft: 1, messagesLeft: 1 };
   }
 }
 

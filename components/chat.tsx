@@ -49,7 +49,7 @@ export function WishChat() {
   const [leak, setLeak] = useState<{ line: string } | null>(null);
   const [crash, setCrash] = useState<null | "arming" | "active">(null);
   const [burst, setBurst] = useState<number | null>(null);
-  const [wishesLeft, setWishesLeft] = useState<string | null>(null);
+  const [chatsLeft, setChatsLeft] = useState<string | null>(null);
   const resurrected = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -62,8 +62,10 @@ export function WishChat() {
           resurrected.current ? { "x-oww-resurrected": "1" } : {},
         fetch: (async (input: RequestInfo | URL, init?: RequestInit) => {
           const res = await fetch(input, init);
-          const w = res.headers.get("x-oww-wishes-left");
-          if (w !== null) setWishesLeft(w);
+          const chats =
+            res.headers.get("x-oww-chats-left") ??
+            res.headers.get("x-oww-wishes-left");
+          if (chats !== null) setChatsLeft(chats);
           if (!res.ok) {
             let message = "the line went dead for a moment. try again.";
             try {
@@ -205,12 +207,12 @@ export function WishChat() {
               />
             </div>
             <div className="flex items-center gap-2">
-              {wishesLeft !== null && (
+              {chatsLeft !== null && (
                 <span
                   className="rounded-full border border-brand/30 bg-cream-bright px-2.5 py-1 font-display text-[11px] font-bold text-brand-deep"
                   title="New consultations left today"
                 >
-                  wishes left: {wishesLeft === "inf" ? "∞" : wishesLeft}
+                  chats left: {chatsLeft === "inf" ? "∞" : chatsLeft}
                 </span>
               )}
               <button
