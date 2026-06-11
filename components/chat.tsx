@@ -30,9 +30,41 @@ const EXAMPLE_WISHES = [
   "i want a smoking hot girlfriend",
   "i want my crush to be obsessed with me",
   "i want my problems to disappear",
-	"i want to never feel pain again",
-	"i want to fly",
+  "i want to never feel pain again",
+  "i want to fly",
+  "i want to be the coolest person on earth",
+  "i want everyone to like me",
+  "i want to be famous",
+  "i want to be irresistible",
+  "i want to read minds",
+  "i want to win the lottery",
+  "i want to go viral",
+  "i want to be the smartest person alive",
+  "i want to never work again",
+  "i want everyone to always tell me the truth",
+  "i want to be young again",
+  "i want my dog to talk",
+  "i want world peace",
+  "i want free food for life",
+  "i want to marry a billionaire",
+  "i want to be invisible",
+  "i want to find true love",
+  "i want to lose weight",
+  "i want abs without working out",
+  "i want my ex to regret losing me",
 ];
+
+const SUGGESTION_COUNT = 5;
+
+/** Fisher–Yates shuffle, then take the first few. */
+function pickWishes(): string[] {
+  const pool = [...EXAMPLE_WISHES];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, SUGGESTION_COUNT);
+}
 
 function loadSession(): UIMessage[] {
   try {
@@ -50,6 +82,8 @@ export function WishChat() {
   const [crash, setCrash] = useState<null | "arming" | "active">(null);
   const [burst, setBurst] = useState<number | null>(null);
   const [chatsLeft, setChatsLeft] = useState<string | null>(null);
+  // Filled on mount (not at render) so the server and client HTML agree.
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const resurrected = useRef(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -91,6 +125,7 @@ export function WishChat() {
   useEffect(() => {
     const saved = loadSession();
     if (saved.length) setMessages(saved);
+    setSuggestions(pickWishes());
     if (window.localStorage.getItem(AFTERLIFE_KEY) === "1") {
       resurrected.current = true;
     }
@@ -167,6 +202,7 @@ export function WishChat() {
     clearError();
     setMessages([]);
     setLeak(null);
+    setSuggestions(pickWishes());
     window.sessionStorage.removeItem(SESSION_KEY);
     inputRef.current?.focus();
   };
@@ -249,7 +285,7 @@ export function WishChat() {
               className="rise mt-7 flex flex-wrap items-center justify-center gap-2"
               style={{ animationDelay: "0.24s" }}
             >
-              {EXAMPLE_WISHES.map((w) => (
+              {suggestions.map((w) => (
                 <button
                   key={w}
                   onClick={() => submitText(w)}
